@@ -6,7 +6,9 @@ namespace APInancy
     {
         public HelloModule()
         {
-            Get["/"] = parameters => "Hello World";
+            Get("/", _ => {
+                return "Hello World";
+            });
         }
     }
 }
