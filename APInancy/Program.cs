@@ -7,7 +7,7 @@ namespace APInancy
     {
         static void Main(string[] args)
         {
-            using (var host = new NancyHost(new Uri("http://localhost:80")))
+            using (var host = new NancyHost(new Uri("http://localhost:8080")))
             {
                 host.Start();
 

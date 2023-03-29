@@ -4,10 +4,15 @@ namespace APInancy
 {
     public class HelloModule : NancyModule
     {
+        //test
         public HelloModule()
         {
-            Get("/", _ => {
+            
+            Get("/Hello", _ => {
                 return "Hello World";
+            });
+            Get("/", _ => {
+                return "root";
             });
         }
     }
