@@ -18,7 +18,7 @@ namespace APInancy
 
             Get("/func2", _ => {
                 var response = "";
-                for (int count = 0; count < 999; count++)
+                for (int count = 0; count < 10; count++)
                 {
                     response = response + count.ToString() + ",";
                 }
