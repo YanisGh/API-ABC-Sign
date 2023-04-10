@@ -13,6 +13,7 @@ namespace APInancy
                 PostData recievedData = this.Bind<PostData>();
 
                 return new { success = true, message = $"Record recieved name = {recievedData.Name}" };
+
             });
         }
     }
