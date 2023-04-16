@@ -12,4 +12,10 @@
     <PackageReference Include="Nancy.Hosting.Self" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="views\ViewTest.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
