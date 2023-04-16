@@ -7,12 +7,18 @@ namespace APInancy
     {
         public PostModule()
         {
+            
 
-            Post("/sendname", _  =>
+            Post("/sendname/{id:int}", parameters =>
             {
+                /*if (parameters.id == null)
+                {
+                    return new { success = false, message = $"No id received" };
+                }*/
+
                 PostData recievedData = this.Bind<PostData>();
 
-                return new { success = true, message = $"Record recieved name = {recievedData.Name}" };
+                return new { success = true, message = $"Record recieved name = {recievedData.Name} and id = {parameters.id} or {recievedData.Id}" };
 
             });
         }
