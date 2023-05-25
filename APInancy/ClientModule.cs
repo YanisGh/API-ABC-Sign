@@ -10,7 +10,8 @@ namespace APInancy
         public ClientModule()
         {
             MySqlConnection conn = DBconn.GetConnection();
-
+            
+            //Ajoute tout les clients dans une liste puis renvoie la liste. 
             Get("/getclients", _ =>
             {
                 {
@@ -28,7 +29,7 @@ namespace APInancy
                                 var phone = reader.IsDBNull(reader.GetOrdinal("telephone")) ? "" : reader.GetString(reader.GetOrdinal("telephone"));
                                 var address = reader.IsDBNull(reader.GetOrdinal("adresse")) ? "" : reader.GetString(reader.GetOrdinal("adresse"));
 
-                                clients.Add($"Name: {name}, Email: {email}, Phone: {phone}, Address: {address}");
+                                clients.Add($"Nom: {name}, Email: {email}, telephone: {phone}, Adresse: {address}");
                             }
                         }
                     }
@@ -38,13 +39,14 @@ namespace APInancy
                 }
             });
 
+            //Ajoute un client avec les infos envoyer sur Postman. 
+            //Penser a faire une page HTML dédiée quand il le faudra.
             Post("/postclient", parameters =>
             {
-                PostData postData = this.Bind<PostData>();
+                ClientPostData postData = this.Bind<ClientPostData>();
 
                 string query = "INSERT INTO clients (nom, email, telephone, adresse) " +
                                "VALUES (@Name, @Email, @Phone, @Address)";
-
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 

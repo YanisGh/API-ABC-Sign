@@ -16,7 +16,7 @@ namespace APInancy
                     return new { success = false, message = $"No id received" };
                 }*/
 
-                PostData recievedData = this.Bind<PostData>();
+                ClientPostData recievedData = this.Bind<ClientPostData>();
 
                 return new { success = true, message = $"Record recieved name = {recievedData.Name} and id = {parameters.id} or {recievedData.Id}" };
 

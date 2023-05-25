@@ -8,7 +8,7 @@ namespace NancyStandalone
         public ViewModule()
         {
             Get("/viewtest", parameters => {
-                PostData data = new PostData()
+                ClientPostData data = new ClientPostData()
                 {
                     Name = "Peter Shaw",
                     Email = "top@secret.com"
