@@ -2,6 +2,7 @@
 using Nancy;
 using Nancy.ModelBinding;
 using System.Configuration;
+using System.Collections.Generic;
 
 namespace APInancy
 {
@@ -10,38 +11,36 @@ namespace APInancy
         public ClientModule()
         {
             MySqlConnection conn = DBconn.GetConnection();
-            
-            //Ajoute tout les clients dans une liste puis renvoie la liste. 
+
+            // Retrieve clients
             Get("/getclients", _ =>
             {
+                var query = "SELECT * FROM clients";
+                var clients = new List<Dictionary<string, object>>();
+
+                using (var command = new MySqlCommand(query, conn))
                 {
-                    var query = "SELECT * FROM clients";
-                    var clients = new List<string>();
-
-                    using (var command = new MySqlCommand(query, conn))
+                    using (var reader = command.ExecuteReader())
                     {
-                        using (var reader = command.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                var name = reader.GetString(reader.GetOrdinal("nom"));
-                                var email = reader.IsDBNull(reader.GetOrdinal("email")) ? "" : reader.GetString(reader.GetOrdinal("email"));
-                                var phone = reader.IsDBNull(reader.GetOrdinal("telephone")) ? "" : reader.GetString(reader.GetOrdinal("telephone"));
-                                var address = reader.IsDBNull(reader.GetOrdinal("adresse")) ? "" : reader.GetString(reader.GetOrdinal("adresse"));
-                                var postalCode = reader.IsDBNull(reader.GetOrdinal("code_postal")) ? 0 : reader.GetInt32(reader.GetOrdinal("code_postal"));
+                            var client = new Dictionary<string, object>();
 
-                                clients.Add($"Nom: {name}, Email: {email}, telephone: {phone}, Adresse: {address}");
-                            }
+                            client["Nom"] = reader.GetString(reader.GetOrdinal("nom"));
+                            client["Email"] = reader.IsDBNull(reader.GetOrdinal("email")) ? "" : reader.GetString(reader.GetOrdinal("email"));
+                            client["Telephone"] = reader.IsDBNull(reader.GetOrdinal("telephone")) ? "" : reader.GetString(reader.GetOrdinal("telephone"));
+                            client["Adresse"] = reader.IsDBNull(reader.GetOrdinal("adresse")) ? "" : reader.GetString(reader.GetOrdinal("adresse"));
+                            client["Code Postal"] = reader.IsDBNull(reader.GetOrdinal("code_postal")) ? 0 : reader.GetInt32(reader.GetOrdinal("code_postal"));
+
+                            clients.Add(client);
                         }
                     }
-                    var response = string.Join("<br>", clients);
-                    return response;
-
                 }
+
+                return Response.AsJson(clients);
             });
 
-            //Ajoute un client avec les infos envoyer sur Postman. 
-            //Penser a faire une page HTML dédiée quand il le faudra.
+            // Add a client
             Post("/postclient", parameters =>
             {
                 ClientPostData postData = this.Bind<ClientPostData>();
