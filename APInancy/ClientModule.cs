@@ -28,6 +28,7 @@ namespace APInancy
                                 var email = reader.IsDBNull(reader.GetOrdinal("email")) ? "" : reader.GetString(reader.GetOrdinal("email"));
                                 var phone = reader.IsDBNull(reader.GetOrdinal("telephone")) ? "" : reader.GetString(reader.GetOrdinal("telephone"));
                                 var address = reader.IsDBNull(reader.GetOrdinal("adresse")) ? "" : reader.GetString(reader.GetOrdinal("adresse"));
+                                var postalCode = reader.IsDBNull(reader.GetOrdinal("code_postal")) ? 0 : reader.GetInt32(reader.GetOrdinal("code_postal"));
 
                                 clients.Add($"Nom: {name}, Email: {email}, telephone: {phone}, Adresse: {address}");
                             }
@@ -45,8 +46,8 @@ namespace APInancy
             {
                 ClientPostData postData = this.Bind<ClientPostData>();
 
-                string query = "INSERT INTO clients (nom, email, telephone, adresse) " +
-                               "VALUES (@Name, @Email, @Phone, @Address)";
+                string query = "INSERT INTO clients (nom, email, telephone, adresse, code_postal) " +
+                                "VALUES (@Name, @Email, @Phone, @Address, @PostalCode)";
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -54,6 +55,7 @@ namespace APInancy
                 cmd.Parameters.AddWithValue("@Email", postData.Email);
                 cmd.Parameters.AddWithValue("@Phone", postData.Phone);
                 cmd.Parameters.AddWithValue("@Address", postData.Address);
+                cmd.Parameters.AddWithValue("@PostalCode", postData.PostalCode);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
