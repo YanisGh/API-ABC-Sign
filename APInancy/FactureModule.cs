@@ -11,7 +11,7 @@ namespace APInancy
         {
             MySqlConnection conn = DBconn.GetConnection();
 
-            // récuperer les factures
+            //récuperer les factures
             Get("/getfactures", _ =>
             {
                 var query = "SELECT * FROM factures";
@@ -25,7 +25,7 @@ namespace APInancy
                         {
                             var factureId = reader.GetInt32(reader.GetOrdinal("facture_id"));
                             var clientId = reader.IsDBNull(reader.GetOrdinal("client_id")) ? -1 : reader.GetInt32(reader.GetOrdinal("client_id"));
-                            var factureDate = reader.GetDateTime(reader.GetOrdinal("facture_date"));
+                            var factureDate = reader.GetString(reader.GetOrdinal("facture_date"));
                             var description = reader.IsDBNull(reader.GetOrdinal("description")) ? "" : reader.GetString(reader.GetOrdinal("description"));
                             var total = reader.GetDecimal(reader.GetOrdinal("total"));
 
@@ -37,13 +37,6 @@ namespace APInancy
                 var response = string.Join("<br>", invoices);
                 return response;
             });
-
-            /*{
-                "client_id" : "",
-                "FactureDate": "top@secret.com",
-                "Description": "25/05/2023",
-                "Total": "123,63"
-            }*/
 
             // Add an invoice
             Post("/postfacture", parameters =>

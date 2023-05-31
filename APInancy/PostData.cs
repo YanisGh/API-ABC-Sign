@@ -21,10 +21,5 @@ namespace APInancy
         public string FactureDate { get; set; }
         public string Description { get; set; }
         public decimal Total { get; set; }
-        public DateTime GetFactureDateTime()
-        {
-            DateTime.TryParseExact(FactureDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result);
-            return result;
-        }
     }
 }
