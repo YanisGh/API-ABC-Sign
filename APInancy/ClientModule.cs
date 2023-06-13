@@ -1,7 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using Nancy;
 using Nancy.ModelBinding;
-using System.Configuration;
 using System.Collections.Generic;
 
 namespace APInancy
@@ -13,13 +12,23 @@ namespace APInancy
             MySqlConnection conn = DBconn.GetConnection();
 
             // Retrieve clients
-            Get("/getclients", _ =>
+            Get("/getclients/{param?}", parameters =>
             {
+                string param = parameters.param;
                 var query = "SELECT * FROM clients";
                 var clients = new List<Dictionary<string, object>>();
 
+                if (!string.IsNullOrEmpty(param))
+                {
+                    // Add WHERE clause to filter by name or id
+                    query += " WHERE nom = @Param OR client_id = @Param";
+                }
+
                 using (var command = new MySqlCommand(query, conn))
                 {
+                    // Add parameter to the command
+                    command.Parameters.AddWithValue("@Param", param);
+
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())

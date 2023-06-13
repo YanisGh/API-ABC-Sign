@@ -13,13 +13,24 @@ namespace APInancy
             MySqlConnection conn = DBconn.GetConnection();
 
             // Retrieve invoices
-            Get("/getfactures", _ =>
+            // Retrieve invoices
+            Get("/getfactures/{id?}", parameters =>
             {
+                string id = parameters.id;
                 var query = "SELECT * FROM factures";
                 var invoices = new List<Dictionary<string, object>>();
 
+                if (!string.IsNullOrEmpty(id))
+                {
+                    // Add WHERE clause to filter by facture_id
+                    query += " WHERE facture_id = @Id";
+                }
+
                 using (var command = new MySqlCommand(query, conn))
                 {
+                    // Add parameter to the command
+                    command.Parameters.AddWithValue("@Id", id);
+
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -36,9 +47,10 @@ namespace APInancy
                         }
                     }
                 }
-
+                
                 return Response.AsJson(invoices);
             });
+
 
             // Add an invoice
             Post("/postfacture", parameters =>
